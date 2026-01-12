@@ -16,7 +16,7 @@ namespace DAL.Repositories
         }
 
         public Task DeleteAsync(Group entity)
-        {
+    {
             throw new NotImplementedException();
         }
 

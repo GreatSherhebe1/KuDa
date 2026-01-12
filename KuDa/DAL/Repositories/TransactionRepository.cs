@@ -16,7 +16,7 @@ namespace DAL.Repositories
         }
 
         public Task DeleteAsync(Transaction entity)
-        {
+    {
             throw new NotImplementedException();
         }
 
