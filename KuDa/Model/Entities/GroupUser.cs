@@ -8,9 +8,9 @@ namespace Model.Entities
 {
     public class GroupUser
     {
-        public Guid ID { get; set; }
+        public int ID { get; set; }
 
-        public Guid UserID { get; set; }
-        public Guid GroupID { get; set; }
+        public int UserID { get; set; }
+        public int GroupID { get; set; }
     }
 }

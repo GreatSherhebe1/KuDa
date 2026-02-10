@@ -9,12 +9,12 @@ namespace Model.Entities
 {
     public class Group
     {
-        public Guid ID { get; set; }
+        public int ID { get; set; }
 
         public string Name { get; set; }
         public string Currency { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public Guid MasterID { get; set; }
+        public int MasterID { get; set; }
     }
 }

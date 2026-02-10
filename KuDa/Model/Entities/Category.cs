@@ -9,12 +9,12 @@ namespace Model.Entities
 {
     public class Category
     {
-        public Guid ID { get; set; }
+        public int ID { get; set; }
 
         public string Name { get; set; }
         public bool IsDefault { get; set; }
 
-        public Guid GroupID { get; set; }
-        public Guid ParentID { get; set; }
+        public int GroupID { get; set; }
+        public int ParentID { get; set; }
     }
 }
