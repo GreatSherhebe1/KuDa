@@ -11,11 +11,15 @@ namespace KuDa.Server
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
-            modelBuilder.Entity<User>().HasData(
-                new User { ID = 0, Email = "test@mail.ru", Name = "TestIvan"  });
+
         }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<User>().HasData(
+        //        new User { ID = 0, Email = "test@mail.ru", Name = "TestIvan"  });
+        //}
     }
 }

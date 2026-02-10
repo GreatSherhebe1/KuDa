@@ -1,6 +1,8 @@
+
+using KuDa.Server;
 using Microsoft.EntityFrameworkCore;
 
-namespace KuDa.Server
+namespace Server
 {
     public class Program
     {
@@ -9,32 +11,35 @@ namespace KuDa.Server
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
 
-            var connection = builder.Configuration.GetConnectionString("Postgre");
-            builder.Services.AddDbContext<AppDBContext>(o => o.UseNpgsql(connection));
-
-            builder.Services.AddMvc();
             builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            var connection = builder.Configuration.GetConnectionString("Postgre");
+            builder.Services.AddDbContext<AppDBContext>(o => o.UseNpgsql(connection));
             var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapSwagger();
                 app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("v1/swagger.json", "My API V1");
-                });
+                app.UseSwaggerUI();
             }
+
+            app.UseHttpsRedirection();
+
+            app.UseAuthorization();
+
+
+            app.MapControllers();
+
             app.MapGet("/ping", () => "pong!");
-            app.Map("/testdb", async (AppDBContext dbContext) =>
+            app.MapGet("/testdb", async (AppDBContext dbContext) =>
             {
                 try
                 {
-                    // Проверяем возможность подключиться к БД
                     var canConnect = await dbContext.Database.CanConnectAsync();
                     return canConnect ? "Подключение к базе данных успешно!" : "Не удалось подключиться к базе данных.";
                 }
@@ -43,6 +48,7 @@ namespace KuDa.Server
                     return $"Ошибка подключения: {ex.Message}";
                 }
             });
+
             app.Run();
         }
     }
