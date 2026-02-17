@@ -15,11 +15,5 @@ namespace KuDa.Server
         {
 
         }
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<User>().HasData(
-        //        new User { ID = 0, Email = "test@mail.ru", Name = "TestIvan"  });
-        //}
     }
 }

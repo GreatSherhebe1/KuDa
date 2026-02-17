@@ -12,5 +12,11 @@ namespace Model.Entities
 
         public int UserID { get; set; }
         public int GroupID { get; set; }
+
+        public bool CouldAddProperties { get; set; }
+
+        public bool CouldDeleteTransactions { get; set; }
+
+        public bool CouldManageUsers { get; set; }
     }
 }
