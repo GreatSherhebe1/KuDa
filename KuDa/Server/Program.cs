@@ -35,18 +35,10 @@ namespace Server
 
             app.MapControllers();
 
-            app.MapGet("/ping", () => "pong!");
-            app.MapGet("/testdb", async (AppDBContext dbContext) =>
+            app.MapGet("/calendar", async (context) =>
             {
-                try
-                {
-                    var canConnect = await dbContext.Database.CanConnectAsync();
-                    return canConnect ? "Подключение к базе данных успешно!" : "Не удалось подключиться к базе данных.";
-                }
-                catch (Exception ex)
-                {
-                    return $"Ошибка подключения: {ex.Message}";
-                }
+                context.Response.ContentType = "text/html; charset=utf-8";
+                await context.Response.SendFileAsync("pages/calendar.html");
             });
 
             app.Run();
