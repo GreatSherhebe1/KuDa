@@ -1,6 +1,9 @@
 
 using KuDa.Server;
+using KuDa.Server.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Model.Entities;
+using Model.Interfaces;
 
 namespace Server
 {
@@ -18,8 +21,17 @@ namespace Server
             builder.Services.AddSwaggerGen();
 
             var connection = builder.Configuration.GetConnectionString("Postgre");
-            builder.Services.AddDbContext<AppDBContext>(o => o.UseNpgsql(connection));
+            builder.Services.AddDbContextPool<AppDBContext>(o => o.UseNpgsql(connection));
+
+            builder.Services.AddScoped<CategoryRepository>();
+            builder.Services.AddScoped<GroupRepository>();
+            builder.Services.AddScoped<GroupUserRepository>();
+            builder.Services.AddScoped<TransactionRepository>();
+            builder.Services.AddScoped<UserRepository>();
+
+            builder.Services.AddRazorPages();
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -29,17 +41,12 @@ namespace Server
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
+            app.UseRouting();
+            //app.UseEndpoints();
 
             app.MapControllers();
-
-            app.MapGet("/calendar", async (context) =>
-            {
-                context.Response.ContentType = "text/html; charset=utf-8";
-                await context.Response.SendFileAsync("pages/calendar.html");
-            });
+            app.MapRazorPages();
 
             app.Run();
         }
