@@ -6,38 +6,47 @@ namespace KuDa.Server.Repositories
 {
     public class CategoryRepository : IRepository<Category>
     {
-        private readonly DbSet<Category> categories;
+        private readonly AppDBContext appDBContext;
 
         public CategoryRepository(AppDBContext context) 
         {
-            categories = context.Categories;
+            appDBContext = context;
         }
 
         public Task Add(Category entity)
         {
-            return Task.Run(() => categories.Add(entity));
+            return Task.Run(() => 
+            {
+                appDBContext.Categories.Add(entity);
+                appDBContext.SaveChanges();
+            });
         }
 
         public Task Delete(Category entity)
         {
-            return Task.Run(() => categories.Remove(entity));
+            return Task.Run(() => 
+            {
+                appDBContext.Categories.Remove(entity);
+                appDBContext.SaveChanges();
+            });
         }
 
         public Task<List<Category>> GetAll()
         {
-            return Task.Run(() => categories.ToList());
+            return Task.Run(() => appDBContext.Categories.ToList());
         }
 
         public Task<Category> GetByID(int id)
         {
-            return Task.Run(() => categories.FirstOrDefault(x=> x.ID == id));
+            return Task.Run(() => appDBContext.Categories.FirstOrDefault(x=> x.ID == id));
         }
 
         public Task Update(Category entity)
         {
             return Task.Run(() => 
             {
-                categories.Update(entity);
+                appDBContext.Categories.Update(entity);
+                appDBContext.SaveChanges();
             });
         }
     }

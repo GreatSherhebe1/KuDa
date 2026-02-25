@@ -7,7 +7,7 @@ namespace KuDa.Server
     {
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
-        public virtual DbSet<GroupUser> GroupUser { get; set; }
+        public virtual DbSet<GroupUser> GroupsUsers { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<User> Users { get; set; }
 

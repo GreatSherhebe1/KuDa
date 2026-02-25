@@ -6,36 +6,48 @@ namespace KuDa.Server.Repositories
 {
     public class GroupUserRepository : IRepository<GroupUser>
     {
-        private readonly DbSet<GroupUser> groupUsers;
+        private readonly AppDBContext appDBContext;
 
         public GroupUserRepository(AppDBContext context)
         {
-            groupUsers = context.GroupUser;
+            appDBContext = context;
         }
 
         public Task Add(GroupUser entity)
         {
-            return Task.Run(() => groupUsers.Add(entity));
+            return Task.Run(() =>
+            {
+                appDBContext.GroupsUsers.Add(entity);
+                appDBContext.SaveChanges();
+            });
         }
 
         public Task Delete(GroupUser entity)
         {
-            return Task.Run(() => groupUsers.Remove(entity));
+            return Task.Run(() => 
+            {
+                appDBContext.GroupsUsers.Remove(entity);
+                appDBContext.SaveChanges();
+            });
         }
 
         public Task<List<GroupUser>> GetAll()
         {
-            return Task.Run(() => groupUsers.ToList());
+            return Task.Run(() => appDBContext.GroupsUsers.ToList());
         }
 
         public Task<GroupUser> GetByID(int id)
         {
-            return Task.Run(() => groupUsers.FirstOrDefault(x => x.ID == id));
+            return Task.Run(() => appDBContext.GroupsUsers.FirstOrDefault(x => x.ID == id));
         }
 
         public Task Update(GroupUser entity)
         {
-            return Task.Run(() => groupUsers.Update(entity));
+            return Task.Run(() => 
+            {
+                appDBContext.GroupsUsers.Update(entity);
+                appDBContext.SaveChanges();
+            });
         }
     }
 }
