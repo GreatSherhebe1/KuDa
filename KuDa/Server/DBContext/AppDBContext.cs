@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Model.Entities;
 
-namespace KuDa.Server
+namespace KuDa.Server.DBContext
 {
-    public class AppDBContext : DbContext
+    public abstract class AppDBContext : DbContext
     {
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Group> Groups { get; set; }

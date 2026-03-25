@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KuDa.Server.DBContext;
+using Microsoft.EntityFrameworkCore;
 using Model.Entities;
 using Model.Interfaces;
 

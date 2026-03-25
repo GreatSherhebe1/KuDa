@@ -1,5 +1,4 @@
-
-using KuDa.Server;
+using KuDa.Server.DBContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace Server
@@ -17,8 +16,12 @@ namespace Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            var connection = builder.Configuration.GetConnectionString("Postgre");
-            builder.Services.AddDbContext<AppDBContext>(o => o.UseNpgsql(connection));
+            //var connection = builder.Configuration.GetConnectionString("Postgre");
+            var postgreConnection = builder.Configuration.GetConnectionString("Postgre");
+            builder.Services.AddDbContext<PostgreContext>(o => o.UseNpgsql(postgreConnection));
+
+            var sqliteConnection = builder.Configuration.GetConnectionString("SQLite");
+            builder.Services.AddDbContext<SQLiteContext>(o => o.UseSqlite(sqliteConnection));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,7 +39,7 @@ namespace Server
             app.MapControllers();
 
             app.MapGet("/ping", () => "pong!");
-            app.MapGet("/testdb", async (AppDBContext dbContext) =>
+            app.MapGet("/testdb", async (SQLiteContext dbContext) =>
             {
                 try
                 {
