@@ -8,10 +8,11 @@ namespace Model.Interfaces
 {
     public interface IRepository<T>
     {
-        Task<T> GetByID(int id);
-        Task<List<T>> GetAll();
-        Task Add(T entity);
-        Task Update(T entity);
+        Task<T> GetByIDAsync(int id, CancellationToken token = default);
+        Task<List<T>> GetAllAsync(CancellationToken token = default);
+        Task AddAsync(T entity, CancellationToken token = default);
+        Task UpdateAsync(T entity, CancellationToken token = default);
         Task Delete(T entity);
+        Task SaveChangesAsync(CancellationToken token = default);
     }
 }

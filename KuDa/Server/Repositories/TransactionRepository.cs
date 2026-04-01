@@ -14,7 +14,7 @@ namespace KuDa.Server.Repositories
             transactions = context.Transactions;
         }
 
-        public Task Add(Transaction entity)
+        public Task AddAsync(Transaction entity)
         {
             return Task.Run(() => transactions.Add(entity));
         }
@@ -24,12 +24,12 @@ namespace KuDa.Server.Repositories
             return Task.Run(() => transactions.Remove(entity));
         }
 
-        public Task<List<Transaction>> GetAll()
+        public Task<List<Transaction>> GetAllAsync()
         {
             return Task.Run(() => transactions.ToList());
         }
 
-        public Task<Transaction> GetByID(int id)
+        public Task<Transaction> GetByIDAsync(int id)
         {
             return Task.Run(() => transactions.FirstOrDefault(x => x.ID == id));
         }

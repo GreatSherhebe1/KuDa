@@ -14,7 +14,7 @@ namespace KuDa.Server.Repositories
             groupUsers = context.GroupUser;
         }
 
-        public Task Add(GroupUser entity)
+        public Task AddAsync(GroupUser entity)
         {
             return Task.Run(() => groupUsers.Add(entity));
         }
@@ -24,12 +24,12 @@ namespace KuDa.Server.Repositories
             return Task.Run(() => groupUsers.Remove(entity));
         }
 
-        public Task<List<GroupUser>> GetAll()
+        public Task<List<GroupUser>> GetAllAsync()
         {
             return Task.Run(() => groupUsers.ToList());
         }
 
-        public Task<GroupUser> GetByID(int id)
+        public Task<GroupUser> GetByIDAsync(int id)
         {
             return Task.Run(() => groupUsers.FirstOrDefault(x => x.ID == id));
         }

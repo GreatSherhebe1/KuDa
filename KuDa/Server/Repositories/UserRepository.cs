@@ -15,7 +15,7 @@ namespace KuDa.Server.Repositories
         }
 
 
-        public Task Add(User entity)
+        public Task AddAsync(User entity)
         {
             return Task.Run(() => users.Add(entity));
         }
@@ -25,12 +25,12 @@ namespace KuDa.Server.Repositories
             return Task.Run(() => users.Remove(entity));
         }
 
-        public Task<List<User>> GetAll()
+        public Task<List<User>> GetAllAsync()
         {
             return Task.Run(() => users.ToList());
         }
 
-        public Task<User> GetByID(int id)
+        public Task<User> GetByIDAsync(int id)
         {
             return Task.Run(() => users.FirstOrDefault(x => x.ID == id));
         }

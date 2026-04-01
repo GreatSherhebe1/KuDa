@@ -14,7 +14,7 @@ namespace KuDa.Server.Repositories
             categories = context.Categories;
         }
 
-        public Task Add(Category entity)
+        public Task AddAsync(Category entity)
         {
             return Task.Run(() => categories.Add(entity));
         }
@@ -24,12 +24,12 @@ namespace KuDa.Server.Repositories
             return Task.Run(() => categories.Remove(entity));
         }
 
-        public Task<List<Category>> GetAll()
+        public Task<List<Category>> GetAllAsync()
         {
             return Task.Run(() => categories.ToList());
         }
 
-        public Task<Category> GetByID(int id)
+        public Task<Category> GetByIDAsync(int id)
         {
             return Task.Run(() => categories.FirstOrDefault(x=> x.ID == id));
         }
