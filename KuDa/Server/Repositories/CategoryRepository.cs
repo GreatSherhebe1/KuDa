@@ -2,43 +2,60 @@
 using Microsoft.EntityFrameworkCore;
 using Model.Entities;
 using Model.Interfaces;
+using System.Linq.Expressions;
 
 namespace KuDa.Server.Repositories
 {
     public class CategoryRepository : IRepository<Category>
     {
         private readonly DbSet<Category> categories;
+        private readonly AppDBContext appDBContext;
 
-        public CategoryRepository(AppDBContext context) 
+        public CategoryRepository(AppDBContext context)
         {
+            appDBContext = context;
             categories = context.Categories;
         }
 
-        public Task AddAsync(Category entity)
+        public Task<Category?> GetByIDAsync(int id, CancellationToken token = default)
         {
-            return Task.Run(() => categories.Add(entity));
+            return Task.Run(() => categories.FirstOrDefault(x => x.ID == id));
         }
 
-        public Task Delete(Category entity)
+        public async Task<IEnumerable<Category>> GetAllAsync(CancellationToken token)
         {
-            return Task.Run(() => categories.Remove(entity));
+            return await categories.ToListAsync(token);
         }
 
-        public Task<List<Category>> GetAllAsync()
+        public async Task<IEnumerable<Category>> FindAsync(Expression<Func<Category, bool>> predicate, CancellationToken token)
         {
-            return Task.Run(() => categories.ToList());
+            return await categories.Where(predicate).ToListAsync(token);
         }
 
-        public Task<Category> GetByIDAsync(int id)
+        public Task AddAsync(Category entity, CancellationToken token = default)
         {
-            return Task.Run(() => categories.FirstOrDefault(x=> x.ID == id));
+            return Task.Run(() => 
+            { 
+                categories.Add(entity);
+                appDBContext.SaveChanges();
+            }, token);
         }
 
-        public Task Update(Category entity)
+        public Task UpdateAsync(Category entity, CancellationToken token = default)
         {
             return Task.Run(() => 
             {
                 categories.Update(entity);
+                appDBContext.SaveChanges();
+            }, token);
+        }
+
+        public Task Delete(Category entity)
+        {
+            return Task.Run(() =>
+            {
+                categories.Remove(entity);
+                appDBContext.SaveChanges();
             });
         }
     }
