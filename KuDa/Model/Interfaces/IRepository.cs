@@ -15,5 +15,6 @@ namespace Model.Interfaces
         Task AddAsync(T entity, CancellationToken token = default);
         Task UpdateAsync(T entity, CancellationToken token = default);
         Task Delete(T entity);
+        Task SaveChangesAsync(CancellationToken token = default);
     }
 }

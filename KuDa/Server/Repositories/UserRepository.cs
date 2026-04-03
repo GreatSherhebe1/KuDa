@@ -32,29 +32,22 @@ namespace KuDa.Server.Repositories
 
         public Task AddAsync(User entity, CancellationToken token = default)
         {
-            return Task.Run(() =>
-            {
-                context.Users.Add(entity);
-                context.SaveChanges();
-            }, token);
+            return Task.Run(() => context.Users.Add(entity), token);
         }
 
         public Task UpdateAsync(User entity, CancellationToken token = default)
         {
-            return Task.Run(() =>
-            {
-                context.Users.Update(entity);
-                context.SaveChanges();
-            }, token);
+            return Task.Run(() => context.Users.Update(entity), token);
         }
 
         public Task Delete(User entity)
         {
-            return Task.Run(() =>
-            {
-                context.Users.Remove(entity);
-                context.SaveChanges();
-            });
+            return Task.Run(() => context.Users.Remove(entity));
+        }
+
+        public Task SaveChangesAsync(CancellationToken token = default)
+        {
+            return Task.Run(context.SaveChanges, token);
         }
     }
 }

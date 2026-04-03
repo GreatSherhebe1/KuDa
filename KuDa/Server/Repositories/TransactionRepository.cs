@@ -30,29 +30,22 @@ namespace KuDa.Server.Repositories
 
         public Task AddAsync(Transaction entity, CancellationToken token = default)
         {
-            return Task.Run(() => 
-            {
-                context.Transactions.Add(entity);
-                context.SaveChanges();
-            }, token);
+            return Task.Run(() => context.Transactions.Add(entity), token);
         }
 
         public Task UpdateAsync(Transaction entity, CancellationToken token = default)
         {
-            return Task.Run(() =>
-            {
-                context.Transactions.Update(entity);
-                context.SaveChanges();
-            }, token);
+            return Task.Run(() => context.Transactions.Update(entity), token);
         }
 
         public Task Delete(Transaction entity)
         {
-            return Task.Run(() =>
-            {
-                context.Transactions.Remove(entity);
-                context.SaveChanges();
-            });
+            return Task.Run(() => context.Transactions.Remove(entity));
+        }
+
+        public Task SaveChangesAsync(CancellationToken token = default)
+        {
+            return Task.Run(context.SaveChanges, token);
         }
     }
 }

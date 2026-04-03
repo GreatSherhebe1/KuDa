@@ -34,29 +34,22 @@ namespace KuDa.Server.Repositories
 
         public Task AddAsync(Model.Entities.Group entity, CancellationToken token = default)
         {
-            return Task.Run(() => 
-            {
-                context.Groups.Add(entity);
-                context.SaveChanges();
-            });
+            return Task.Run(() => context.Groups.Add(entity), token);
         }
 
         public Task UpdateAsync(Model.Entities.Group entity, CancellationToken token = default)
         {
-            return Task.Run(() =>
-            {
-                context.Groups.Update(entity);
-                context.SaveChanges();
-            });
+            return Task.Run(() => context.Groups.Update(entity), token);
         }
 
         public Task Delete(Model.Entities.Group entity)
         {
-            return Task.Run(() => 
-            {
-                context.Groups.Remove(entity);
-                context.SaveChanges();
-            });
+            return Task.Run(() => context.Groups.Remove(entity));
+        }
+
+        public Task SaveChangesAsync(CancellationToken token = default)
+        {
+            return Task.Run(context.SaveChanges, token);
         }
     }
 }
