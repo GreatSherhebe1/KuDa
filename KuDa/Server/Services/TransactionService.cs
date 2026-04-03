@@ -1,32 +1,66 @@
-﻿using KuDa.Server.DTO;
+﻿using AutoMapper;
+using KuDa.Server.DTO;
+using KuDa.Server.Mapping;
+using KuDa.Server.Repositories;
+using Model.Entities;
+using System.Linq.Expressions;
+using Transaction = Model.Entities.Transaction;
 
 namespace KuDa.Server.Services
 {
     public class TransactionService : ITransactionService
     {
-        public Task<TransactionResponse> CreateTransactionAsync(TransationRequest dto, CancellationToken token = default)
+        private readonly TransactionRepository repository;
+        private readonly IMapper mapper;
+
+        public TransactionService(TransactionRepository repository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this.repository = repository;
+            this.mapper = mapper;
         }
 
-        public Task<bool> DeleteTransactionAsync(int id, CancellationToken token = default)
+        public async Task<TransactionResponse?> GetTransactionByIDAsync(int ID, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            var transaction = await repository.GetByIDAsync(ID, token);
+            return transaction == null ? null : mapper.Map<TransactionResponse>(transaction);
         }
 
-        public Task<IEnumerable<TransactionResponse>> GetAllProductsAsync(CancellationToken token = default)
+        public async Task<IEnumerable<TransactionResponse>> GetAllTransactionsAsync(CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            var transactions = await repository.GetAllAsync(token);
+            return mapper.Map<IEnumerable<TransactionResponse>>(transactions);
         }
 
-        public Task<TransactionResponse?> GetTransactionByIDAsync(int ID, CancellationToken token = default)
+        public async Task<TransactionResponse> CreateTransactionAsync(TransationRequest dto, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            var transaction = mapper.Map<Transaction>(dto);
+            transaction.CreatedAt = DateTime.UtcNow;
+
+            await repository.AddAsync(transaction, token);
+            await repository.SaveChangesAsync(token);
+
+            return mapper.Map<TransactionResponse>(transaction);
         }
 
-        public Task<TransactionResponse> UpdateTransactionAsync(TransationRequest dto, CancellationToken token = default)
+        public async Task<TransactionResponse> UpdateTransactionAsync(TransationRequest dto, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            var transaction = mapper.Map<Transaction>(dto);
+
+            await repository.UpdateAsync(transaction, token);
+            await repository.SaveChangesAsync(token);
+
+            return mapper.Map<TransactionResponse>(transaction);
+        }
+
+        public async Task<bool> DeleteTransactionAsync(int id, CancellationToken token = default)
+        {
+            var transaction = await repository.GetByIDAsync(id, token);
+            if (transaction == null)
+                return false;
+
+            repository.Delete(transaction);
+            await repository.SaveChangesAsync(token);
+            return true;
         }
     }
 }
