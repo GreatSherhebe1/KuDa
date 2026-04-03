@@ -12,6 +12,7 @@ namespace Model.Entities
 
         public int UserID { get; set; }
         public int GroupID { get; set; }
+        public DateTime JoinedAt { get; set; }
 
         public bool CouldAddProperties { get; set; }
 

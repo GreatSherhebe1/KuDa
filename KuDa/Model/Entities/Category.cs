@@ -13,6 +13,7 @@ namespace Model.Entities
 
         public string Name { get; set; }
         public bool IsDefault { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public int GroupID { get; set; }
         public int ParentID { get; set; }
