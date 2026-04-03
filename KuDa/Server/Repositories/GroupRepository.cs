@@ -16,6 +16,21 @@ namespace KuDa.Server.Repositories
             this.context = context;
         }
 
+        public Task<Model.Entities.Group?> GetByIDAsync(int id, CancellationToken token = default)
+        {
+            return Task.Run(() => context.Groups.FirstOrDefault(x => x.ID == id), token);
+        }
+
+        public async Task<IEnumerable<Model.Entities.Group>> GetAllAsync(CancellationToken token = default)
+        {
+
+            return await context.Groups.ToListAsync(token);
+        }
+
+        public async Task<IEnumerable<Model.Entities.Group>> FindAsync(Expression<Func<Model.Entities.Group, bool>> predicate, CancellationToken token)
+        {
+            return await context.Groups.Where(predicate).ToListAsync(token);
+        }
 
         public Task AddAsync(Model.Entities.Group entity, CancellationToken token = default)
         {
@@ -26,41 +41,20 @@ namespace KuDa.Server.Repositories
             });
         }
 
+        public Task UpdateAsync(Model.Entities.Group entity, CancellationToken token = default)
+        {
+            return Task.Run(() =>
+            {
+                context.Groups.Update(entity);
+                context.SaveChanges();
+            });
+        }
+
         public Task Delete(Model.Entities.Group entity)
         {
             return Task.Run(() => 
             {
                 context.Groups.Remove(entity);
-                context.SaveChanges();
-            });
-        }
-
-        public Task<IEnumerable<Model.Entities.Group>> FindAsync(Expression<Func<Model.Entities.Group, bool>> predicate, CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Model.Entities.Group>> GetAllAsync()
-        {
-            return Task.Run(() => groups.ToList());
-        }
-
-        public async Task<IEnumerable<Model.Entities.Group>> GetAllAsync(CancellationToken token = default)
-        {
-
-            return await context.Groups.ToListAsync(token);
-        }
-
-        public Task<Model.Entities.Group?> GetByIDAsync(int id, CancellationToken token = default)
-        {
-            return Task.Run(() => context.Groups.FirstOrDefault(x => x.ID == id), token);
-        }
-
-        public Task UpdateAsync(Model.Entities.Group entity, CancellationToken token = default)
-        {
-            return Task.Run(() => 
-            {
-                context.Groups.Update(entity);
                 context.SaveChanges();
             });
         }

@@ -2,42 +2,59 @@
 using Microsoft.EntityFrameworkCore;
 using Model.Entities;
 using Model.Interfaces;
+using System.Linq.Expressions;
 
 namespace KuDa.Server.Repositories
 {
     public class UserRepository : IRepository<User>
     {
-        private readonly DbSet<User> users;
+        private readonly AppDBContext context;
 
         public UserRepository(AppDBContext context)
         {
-            users = context.Users;
+            this.context = context;
         }
 
-
-        public Task AddAsync(User entity)
+        public Task<User?> GetByIDAsync(int id, CancellationToken token = default)
         {
-            return Task.Run(() => users.Add(entity));
+            return Task.Run(() => context.Users.FirstOrDefault(x => x.ID == id), token);
+        }
+
+        public async Task<IEnumerable<User>> GetAllAsync(CancellationToken token = default)
+        {
+            return await context.Users.ToListAsync(token);
+        }
+
+        public async Task<IEnumerable<User>> FindAsync(Expression<Func<User, bool>> predicate, CancellationToken token)
+        {
+            return await context.Users.Where(predicate).ToListAsync(token);
+        }
+
+        public Task AddAsync(User entity, CancellationToken token = default)
+        {
+            return Task.Run(() =>
+            {
+                context.Users.Add(entity);
+                context.SaveChanges();
+            }, token);
+        }
+
+        public Task UpdateAsync(User entity, CancellationToken token = default)
+        {
+            return Task.Run(() =>
+            {
+                context.Users.Update(entity);
+                context.SaveChanges();
+            }, token);
         }
 
         public Task Delete(User entity)
         {
-            return Task.Run(() => users.Remove(entity));
-        }
-
-        public Task<List<User>> GetAllAsync()
-        {
-            return Task.Run(() => users.ToList());
-        }
-
-        public Task<User> GetByIDAsync(int id)
-        {
-            return Task.Run(() => users.FirstOrDefault(x => x.ID == id));
-        }
-
-        public Task Update(User entity)
-        {
-            return Task.Run(() => users.Update(entity));
+            return Task.Run(() =>
+            {
+                context.Users.Remove(entity);
+                context.SaveChanges();
+            });
         }
     }
 }
