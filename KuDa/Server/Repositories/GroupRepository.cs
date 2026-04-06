@@ -1,53 +1,54 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KuDa.Server.DBContext;
+using Microsoft.EntityFrameworkCore;
 using Model.Entities;
 using Model.Interfaces;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace KuDa.Server.Repositories
 {
-    public class GroupRepository : IRepository<Group>
+    public class GroupRepository : IRepository<Model.Entities.Group>
     {
-        private readonly AppDBContext appDBContext;
+        private readonly AppDBContext context;
 
         public GroupRepository(AppDBContext context)
         {
-            appDBContext = context;
+            this.context = context;
         }
 
-        public Task Add(Group entity)
+        public Task<Model.Entities.Group?> GetByIDAsync(int id, CancellationToken token = default)
         {
-            return Task.Run(() => 
-            {
-                appDBContext.Add(entity);
-                appDBContext.SaveChanges();
-            });
+            return Task.Run(() => context.Groups.FirstOrDefault(x => x.ID == id), token);
         }
 
-        public Task Delete(Group entity)
+        public async Task<IEnumerable<Model.Entities.Group>> GetAllAsync(CancellationToken token = default)
         {
-            return Task.Run(() => 
-            {
-                appDBContext.Groups.Remove(entity);
-                appDBContext.SaveChanges();
-            });
+            return await context.Groups.ToListAsync(token);
         }
 
-        public Task<List<Group>> GetAll()
+        public async Task<IEnumerable<Model.Entities.Group>> FindAsync(Expression<Func<Model.Entities.Group, bool>> predicate, CancellationToken token)
         {
-            return Task.Run(() => appDBContext.Groups.ToList());
+            return await context.Groups.Where(predicate).ToListAsync(token);
         }
 
-        public Task<Group> GetByID(int id)
+        public Task AddAsync(Model.Entities.Group entity, CancellationToken token = default)
         {
-            return Task.Run(() => appDBContext.Groups.FirstOrDefault(x => x.ID == id));
+            return Task.Run(() => context.Groups.Add(entity), token);
         }
 
-        public Task Update(Group entity)
+        public Task UpdateAsync(Model.Entities.Group entity, CancellationToken token = default)
         {
-            return Task.Run(() => 
-            {
-                appDBContext.Groups.Update(entity);
-                appDBContext.SaveChanges();
-            });
+            return Task.Run(() => context.Groups.Update(entity), token);
+        }
+
+        public Task Delete(Model.Entities.Group entity)
+        {
+            return Task.Run(() => context.Groups.Remove(entity));
+        }
+
+        public Task SaveChangesAsync(CancellationToken token = default)
+        {
+            return Task.Run(context.SaveChanges, token);
         }
     }
 }

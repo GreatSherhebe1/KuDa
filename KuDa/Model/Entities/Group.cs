@@ -16,5 +16,6 @@ namespace Model.Entities
         public DateTime CreatedAt { get; set; }
 
         public int MasterID { get; set; }
+
     }
 }

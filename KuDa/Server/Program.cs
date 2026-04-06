@@ -1,5 +1,4 @@
-
-using KuDa.Server;
+using KuDa.Server.DBContext;
 using KuDa.Server.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Model.Entities;
@@ -30,6 +29,12 @@ namespace Server
             builder.Services.AddScoped<UserRepository>();
 
             builder.Services.AddRazorPages();
+            //var connection = builder.Configuration.GetConnectionString("Postgre");
+            var postgreConnection = builder.Configuration.GetConnectionString("Postgre");
+            builder.Services.AddDbContext<PostgreContext>(o => o.UseNpgsql(postgreConnection));
+
+            //var sqliteConnection = builder.Configuration.GetConnectionString("SQLite");
+            //builder.Services.AddDbContext<SQLiteContext>(o => o.UseSqlite(sqliteConnection));
             var app = builder.Build();
 
 
@@ -47,6 +52,20 @@ namespace Server
 
             app.MapControllers();
             app.MapRazorPages();
+
+            app.MapGet("/ping", () => "pong!");
+            app.MapGet("/testdb", async (SQLiteContext dbContext) =>
+            {
+                try
+                {
+                    var canConnect = await dbContext.Database.CanConnectAsync();
+                    return canConnect ? "Подключение к базе данных успешно!" : "Не удалось подключиться к базе данных.";
+                }
+                catch (Exception ex)
+                {
+                    return $"Ошибка подключения: {ex.Message}";
+                }
+            });
 
             app.Run();
         }
