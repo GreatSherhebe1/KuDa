@@ -42,9 +42,15 @@ namespace KuDa.Server.Services
             return mapper.Map<TransactionResponse>(transaction);
         }
 
-        public async Task<TransactionResponse> UpdateTransactionAsync(TransationRequest dto, CancellationToken token = default)
+        public async Task<TransactionResponse?> UpdateTransactionAsync(TransationRequest dto, CancellationToken token = default)
         {
-            var transaction = mapper.Map<Transaction>(dto);
+
+            var transaction = await repository.GetByIDAsync(dto.ID, token);
+
+            if (transaction == null)
+                return null;
+
+            mapper.Map(dto, transaction);
 
             await repository.UpdateAsync(transaction, token);
             await repository.SaveChangesAsync(token);

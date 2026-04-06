@@ -1,4 +1,5 @@
-﻿using KuDa.Server.DTO;
+﻿using AutoMapper;
+using KuDa.Server.DTO;
 using KuDa.Server.Services.Interfaces;
 using Model.Entities;
 using Model.Interfaces;
@@ -8,21 +9,15 @@ namespace KuDa.Server.Services
     public class UserService : IUserService
     {
         private readonly IRepository<User> repository;
+        private readonly IMapper mapper;
 
-        public UserService(IRepository<User> repository)
+        public UserService(IRepository<User> repository, IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
-        public async Task<UserDTO> CreateUserAsync(CreateUserRequest request, CancellationToken token)
-        {
-            var task = new Task<UserDTO>(() =>
-            {
-
-            });
-        }
-
-        public async Task<bool> DeleteUserAsync(int id, CancellationToken token)
+        public async Task<UserDTO?> GetUserByIDAsync(int id, CancellationToken token)
         {
             throw new NotImplementedException();
         }
@@ -32,12 +27,16 @@ namespace KuDa.Server.Services
             throw new NotImplementedException();
         }
 
-        public async Task<UserDTO?> GetUserByIDAsync(int id, CancellationToken token)
+        public async Task<UserDTO> CreateUserAsync(CreateUserRequest request, CancellationToken token)
+        {
+        }
+
+        public async Task<UserDTO?> UpdateUserAsync(int id, UpdateUserRequest update, CancellationToken token)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<UserDTO?> UpdateUserAsync(int id, UpdateUserRequest update, CancellationToken token)
+        public async Task<bool> DeleteUserAsync(int id, CancellationToken token)
         {
             throw new NotImplementedException();
         }
