@@ -1,7 +1,9 @@
-﻿namespace KuDa.Server.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KuDa.Server.DTO
 {
     public record TransactionResponse(
-        int ID,
+        [Required]int ID,
         string Description,
         decimal Amount,
         DateTime Date,

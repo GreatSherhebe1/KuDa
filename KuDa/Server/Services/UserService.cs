@@ -17,26 +17,31 @@ namespace KuDa.Server.Services
             this.mapper = mapper;
         }
 
-        public async Task<UserDTO?> GetUserByIDAsync(int id, CancellationToken token)
+        public async Task<UserResponse?> GetUserByIDAsync(int id, CancellationToken token)
+        {
+            var user = await repository.GetByIDAsync(id, token);
+            if (user == null)
+                return null;
+
+            return mapper.Map<UserResponse>(user);
+        }
+
+        public async Task<IEnumerable<UserResponse>> GetAllUsersAsync(CancellationToken token)
+        {
+            return await repository.GetAllAsync(token);
+        }
+
+        public Task<UserResponse> CreateUserAsync(UserRequest request, CancellationToken token)
+        {
+
+        }
+
+        public Task<UserResponse?> UpdateUserAsync(int id, UserRequest update, CancellationToken token)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllUsersAsync(CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<UserDTO> CreateUserAsync(CreateUserRequest request, CancellationToken token)
-        {
-        }
-
-        public async Task<UserDTO?> UpdateUserAsync(int id, UpdateUserRequest update, CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> DeleteUserAsync(int id, CancellationToken token)
+        public Task<bool> DeleteUserAsync(int id, CancellationToken token)
         {
             throw new NotImplementedException();
         }

@@ -4,10 +4,10 @@ namespace KuDa.Server.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<UserDTO?> GetUserByIDAsync(int id, CancellationToken token);
-        Task<IEnumerable<UserDTO>> GetAllUsersAsync(CancellationToken token);
-        Task<UserDTO> CreateUserAsync(CreateUserRequest request, CancellationToken token);
-        Task<UserDTO?> UpdateUserAsync(int id, UpdateUserRequest update, CancellationToken token);
+        Task<UserResponse?> GetUserByIDAsync(int id, CancellationToken token);
+        Task<IEnumerable<UserResponse>> GetAllUsersAsync(CancellationToken token);
+        Task<UserResponse> CreateUserAsync(UserRequest request, CancellationToken token);
+        Task<UserResponse?> UpdateUserAsync(int id, UserRequest update, CancellationToken token);
         Task<bool> DeleteUserAsync(int id, CancellationToken token);
     }
 }

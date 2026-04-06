@@ -2,7 +2,9 @@
 
 namespace KuDa.Server.DTO
 {
-    public record CreateUserRequest(
+    public record UserResponse(
+        [Required] int id,
         [Required, MinLength(3), MaxLength(64)] string name,
-        [Required] string email);
+        [Required] string email,
+        DateTime cretedAt);
 }
