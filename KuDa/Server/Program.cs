@@ -1,5 +1,8 @@
 using KuDa.Server.DBContext;
+using KuDa.Server.Mapping;
 using KuDa.Server.Repositories;
+using KuDa.Server.Services;
+using KuDa.Server.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Model.Entities;
 using Model.Interfaces;
@@ -22,11 +25,19 @@ namespace Server
             var connection = builder.Configuration.GetConnectionString("Postgre");
             builder.Services.AddDbContextPool<AppDBContext>(o => o.UseNpgsql(connection));
 
-            builder.Services.AddScoped<CategoryRepository>();
-            builder.Services.AddScoped<GroupRepository>();
-            builder.Services.AddScoped<GroupUserRepository>();
-            builder.Services.AddScoped<TransactionRepository>();
-            builder.Services.AddScoped<UserRepository>();
+            // repos
+            builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
+            builder.Services.AddScoped<IRepository<Group>, GroupRepository>();
+            builder.Services.AddScoped<IRepository<GroupUser>, GroupUserRepository>();
+            builder.Services.AddScoped<IRepository<Transaction>, TransactionRepository>();
+            builder.Services.AddScoped<IRepository<User>, UserRepository>();
+
+            // services
+            builder.Services.AddScoped<ITransactionService, TransactionService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
+            // map
+            //builder.Services.AddAutoMapper();
 
             builder.Services.AddRazorPages();
             //var connection = builder.Configuration.GetConnectionString("Postgre");
