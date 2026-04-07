@@ -64,7 +64,7 @@ namespace KuDa.Server.Services
             if (transaction == null)
                 return false;
 
-            repository.Delete(transaction);
+            await repository.Delete(transaction);
             await repository.SaveChangesAsync(token);
             return true;
         }
