@@ -1,8 +1,8 @@
 using KuDa.Server.DBContext;
-using KuDa.Server.Mapping;
 using KuDa.Server.Repositories;
 using KuDa.Server.Services;
 using KuDa.Server.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Model.Entities;
 using Model.Interfaces;
@@ -16,6 +16,14 @@ namespace Server
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                    };
+                });
+            builder.Services.AddAuthorization();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -57,7 +65,10 @@ namespace Server
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseRouting();
             //app.UseEndpoints();
 
