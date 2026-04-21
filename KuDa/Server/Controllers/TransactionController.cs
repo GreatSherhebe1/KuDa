@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KuDa.Server.Controllers
 {
-    [Route("api/[controler]")]
+    [Route("Kuda/[group]/[controler]")]
     [ApiController]
     public class TransactionController : ControllerBase
     {
